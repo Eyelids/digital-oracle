@@ -34,10 +34,17 @@ from .providers import (
     SignalProvider,
     StooqProvider,
     USTreasuryProvider,
+    WebPageContent,
+    WebPageQuery,
+    WebSearchProvider,
+    WebSearchQuery,
+    WebSearchResult,
+    WebSearchSnippet,
     YieldCurveQuery,
     YieldCurveSnapshot,
     YieldPoint,
 )
+from .concurrent import GatherError, GatherResult, gather
 from .snapshots import RecordingHttpClient, ReplayHttpClient, SnapshotMissError
 
 __all__ = [
@@ -54,6 +61,9 @@ __all__ = [
     "DeribitOrderBook",
     "DeribitOrderLevel",
     "DeribitProvider",
+    "GatherError",
+    "GatherResult",
+    "gather",
     "ExchangeRateQuery",
     "ExchangeRateRecord",
     "KalshiEvent",
@@ -79,6 +89,12 @@ __all__ = [
     "ReplayHttpClient",
     "SnapshotMissError",
     "USTreasuryProvider",
+    "WebPageContent",
+    "WebPageQuery",
+    "WebSearchProvider",
+    "WebSearchQuery",
+    "WebSearchResult",
+    "WebSearchSnippet",
     "YieldCurveQuery",
     "YieldCurveSnapshot",
     "YieldPoint",

@@ -41,6 +41,14 @@ from .treasury import (
     YieldPoint,
 )
 from .stooq import StooqProvider
+from .web import (
+    WebPageContent,
+    WebPageQuery,
+    WebSearchProvider,
+    WebSearchQuery,
+    WebSearchResult,
+    WebSearchSnippet,
+)
 
 __all__ = [
     "DeribitBookSummary",
@@ -79,6 +87,12 @@ __all__ = [
     "StooqProvider",
     "USTreasuryProvider",
     "YieldCurveQuery",
+    "WebPageContent",
+    "WebPageQuery",
+    "WebSearchProvider",
+    "WebSearchQuery",
+    "WebSearchResult",
+    "WebSearchSnippet",
     "YieldCurveSnapshot",
     "YieldPoint",
 ]

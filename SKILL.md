@@ -72,22 +72,46 @@ description: "Answer prediction questions using market trading data, not opinion
 
 ### Step 3: 拉取数据
 
-用 predict-by-emh 的 Python provider 拉取结构化数据：
+用 predict-by-emh 的 Python provider 拉取结构化数据，用 `gather()` 并行调用所有数据源（包括 web search）：
 
 ```python
-# 在 predict-by-emh 项目目录下运行
 from predict_by_emh import (
     PolymarketProvider, PolymarketEventQuery,
     KalshiProvider, KalshiMarketQuery,
     StooqProvider, PriceHistoryQuery,
     DeribitProvider, DeribitFuturesCurveQuery,
     USTreasuryProvider, YieldCurveQuery,
+    WebSearchProvider,
+    gather,
 )
+
+pm = PolymarketProvider()
+kalshi = KalshiProvider()
+stooq = StooqProvider()
+deribit = DeribitProvider()
+treasury = USTreasuryProvider()
+web = WebSearchProvider()
+
+result = gather({
+    "pm_events": lambda: pm.list_events(PolymarketEventQuery(slug_contains="...", limit=10)),
+    "yield_curve": lambda: treasury.latest_yield_curve(),
+    "gold": lambda: stooq.get_history(PriceHistoryQuery(symbol="xauusd", limit=30)),
+    # web search 与结构化 provider 平行执行
+    "vix": lambda: web.search("VIX index current level"),
+    "hy_spread": lambda: web.search("US high yield bond spread OAS"),
+})
+
+# 部分数据源失败不影响其他结果
+curve = result.get("yield_curve")
+vix_info = result.get_or("vix", None)  # WebSearchResult，用 .text() 渲染
 ```
 
-**并行拉取：** 多个不相关的数据源应并行调用，不要串行等待。
+**WebSearchProvider 用法：**
+- `web.search("query")` → 返回 `WebSearchResult`（搜索摘要），用 `.text()` 渲染为可读文本
+- `web.fetch_page("url")` → 返回 `WebPageContent`（页面正文提取）
+- 搜索引擎为 DuckDuckGo，零 API key
 
-**Stooq 拉不到的数据用 web search 补：** VIX、MOVE、CDS利差、TTF天然气、BDI运价、战争险保费等需要从金融网页获取。这些仍然是交易数据，符合方法论。
+**Stooq 拉不到的数据用 web search 补：** VIX、MOVE、CDS利差、TTF天然气、BDI运价、战争险保费、IMF预测等需要从金融网页获取。这些仍然是交易数据，符合方法论。
 
 ### Step 4: 矛盾推理
 
