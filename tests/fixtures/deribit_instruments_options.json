@@ -1,0 +1,201 @@
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599081,
+      "instrument_name": "BTC-11MAR26-60000-C",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "call",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 60000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    },
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599082,
+      "instrument_name": "BTC-11MAR26-60000-P",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "put",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 60000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    },
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599083,
+      "instrument_name": "BTC-11MAR26-61000-C",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "call",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 61000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    },
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599084,
+      "instrument_name": "BTC-11MAR26-61000-P",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "put",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 61000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    },
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599085,
+      "instrument_name": "BTC-11MAR26-62000-C",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "call",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 62000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    },
+    {
+      "base_currency": "BTC",
+      "block_trade_commission": 0.0003,
+      "block_trade_min_trade_amount": 25,
+      "block_trade_tick_size": 0.0001,
+      "contract_size": 1.0,
+      "counter_currency": "USD",
+      "creation_timestamp": 1772870413000,
+      "expiration_timestamp": 1773216000000,
+      "instrument_id": 599086,
+      "instrument_name": "BTC-11MAR26-62000-P",
+      "instrument_type": "reversed",
+      "is_active": true,
+      "kind": "option",
+      "maker_commission": 0.0003,
+      "min_trade_amount": 0.1,
+      "option_type": "put",
+      "price_index": "btc_usd",
+      "quote_currency": "BTC",
+      "settlement_currency": "BTC",
+      "settlement_period": "day",
+      "state": "open",
+      "strike": 62000.0,
+      "taker_commission": 0.0003,
+      "tick_size": 0.0001,
+      "tick_size_steps": [
+        {
+          "above_price": 0.005,
+          "tick_size": 0.0005
+        }
+      ]
+    }
+  ],
+  "testnet": false,
+  "usDiff": 95,
+  "usIn": 1773201875546300,
+  "usOut": 1773201875546395
+}

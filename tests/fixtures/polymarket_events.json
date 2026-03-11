@@ -1,0 +1,59 @@
+[
+  {
+    "id": "16167",
+    "slug": "microstrategy-sell-any-bitcoin-in-2025",
+    "title": "MicroStrategy sells any Bitcoin by ___ ?",
+    "description": "Synthetic fixture derived from a live Polymarket event.",
+    "active": true,
+    "closed": false,
+    "startDate": "2024-12-31T18:51:45.506005Z",
+    "endDate": "2025-12-31T12:00:00Z",
+    "liquidity": 275464.71991,
+    "volume": 21140524.837241005,
+    "volume24hr": 22274.205574,
+    "openInterest": 0,
+    "markets": [
+      {
+        "id": "516926",
+        "question": "MicroStrategy sells any Bitcoin in 2025?",
+        "conditionId": "0x19ee98e348c0ccb341d1b9566fa14521566e9b2ea7aed34dc407a0ec56be36a2",
+        "slug": "microstrategy-sell-any-bitcoin-in-2025",
+        "startDate": "2024-12-31T18:51:34.648Z",
+        "endDate": "2025-12-31T12:00:00Z",
+        "outcomes": "[\"Yes\", \"No\"]",
+        "outcomePrices": "[\"0\", \"1\"]",
+        "volume": "17976157.529867",
+        "active": true,
+        "closed": true,
+        "acceptingOrders": false,
+        "volumeNum": 17976157.529867,
+        "volume24hr": 0,
+        "liquidity": "0",
+        "clobTokenIds": "[\"93592949212798121127213117304912625505836768562433217537850469496310204567695\", \"3074539347152748632858978545166555332546941892131779352477699494423276162345\"]",
+        "lastTradePrice": 1,
+        "bestAsk": 0.001
+      },
+      {
+        "id": "824952",
+        "question": "MicroStrategy sells any Bitcoin by December 31, 2026?",
+        "conditionId": "0x8213d395e079614d6c4d7f4cbb9be9337ab51648a21cc2a334ae8f1966d164b4",
+        "slug": "microstrategy-sells-any-bitcoin-by-december-31-2026",
+        "startDate": "2025-12-04T21:46:05.703374Z",
+        "endDate": "2026-07-01T04:00:00Z",
+        "outcomes": "[\"Yes\", \"No\"]",
+        "outcomePrices": "[\"0.155\", \"0.845\"]",
+        "volume": "384674.60533800034",
+        "active": true,
+        "closed": false,
+        "acceptingOrders": true,
+        "volumeNum": 384674.60533800034,
+        "volume24hr": 6446.550295999999,
+        "liquidityNum": 19049.239,
+        "clobTokenIds": "[\"111128191581505463501777127559667396812474366956707382672202929745167742497287\", \"99807503632459517030616292055983105381849115736225256331133222076990620978808\"]",
+        "lastTradePrice": 0.15,
+        "bestBid": 0.15,
+        "bestAsk": 0.16
+      }
+    ]
+  }
+]
