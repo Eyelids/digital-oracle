@@ -42,6 +42,7 @@ def _coerce_str(value: object) -> str:
 class CftcCotQuery:
     commodity_name: str | None = None  # e.g. "GOLD", "CRUDE OIL", "S&P 500"
     limit: int = 10
+    primary_only: bool = True  # keep only highest-OI contract per date
 
 
 @dataclass(frozen=True)
@@ -127,7 +128,10 @@ class CftcCotProvider(SignalProvider):
             params["$where"] = f"commodity_name like '%{upper_name}%'"
 
         payload = self.http_client.get_json(CFTC_SODA_URL, params=params)
-        return self._parse_reports(payload)
+        reports = self._parse_reports(payload)
+        if query.primary_only:
+            reports = self._keep_primary(reports)
+        return reports
 
     def _parse_reports(self, payload: Any) -> list[CftcCotReport]:
         if not isinstance(payload, list):
@@ -139,3 +143,13 @@ class CftcCotProvider(SignalProvider):
                 raise ProviderParseError("expected each CFTC record to be a JSON object")
             reports.append(_parse_report(record))
         return reports
+
+    @staticmethod
+    def _keep_primary(reports: list[CftcCotReport]) -> list[CftcCotReport]:
+        """Per report date, keep only the contract with the highest open interest."""
+        best: dict[str, CftcCotReport] = {}
+        for report in reports:
+            key = report.report_date
+            if key not in best or report.open_interest > best[key].open_interest:
+                best[key] = report
+        return sorted(best.values(), key=lambda r: r.report_date, reverse=True)

@@ -8,6 +8,7 @@ from typing import Any, Mapping, Protocol
 
 from predict_by_emh.http import JsonHttpClient, TextHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider
 
 TREASURY_RATES_CSV_URL = (
@@ -43,19 +44,6 @@ TENOR_ALIASES = {
     "20 YR": "20Y",
     "30 YR": "30Y",
 }
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
 
 
 def _normalize_tenor_label(value: str) -> str:

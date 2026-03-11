@@ -1,6 +1,7 @@
 ---
 name: predict-by-emh
 description: "Answer prediction questions using market trading data, not opinions. Use when the user asks probability questions about geopolitics, economics, markets, industries, or any topic where real money is being traded on the outcome. Examples: 'What's the probability of WW3?', 'Will there be a recession?', 'Is AI in a bubble?', 'When will the Russia-Ukraine war end?', 'Is it a good time to buy gold?', 'Will SPY drop 5% this month?', 'Is NVDA options premium overpriced?'. The skill reads prices from prediction markets, commodities, equities, options chains, derivatives, yield curves, and currencies, then cross-validates multiple signals to produce a structured probability report."
+metadata: { "openclaw": { "emoji": "📈", "requires": { "bins": ["uv"] } } }
 ---
 
 # predict-by-emh
@@ -88,7 +89,6 @@ description: "Answer prediction questions using market trading data, not opinion
 - Treasury: 收益率曲线形态 → 衰退信号
 - Web search: VIX 水平、margin debt 水平、杠杆ETF 集中度
 
-**详细的元信号参考：** 见 [references/signals.md](references/signals.md)
 **可用交易符号目录：** 见 [references/symbols.md](references/symbols.md)
 **Provider API 速查：** 见 [references/providers.md](references/providers.md)
 
@@ -109,7 +109,7 @@ from predict_by_emh import (
     EdgarProvider, EdgarInsiderQuery,
     BisProvider, BisRateQuery,
     WorldBankProvider, WorldBankQuery,
-    YFinanceProvider, OptionsChainQuery,  # 需要 pip install yfinance
+    YFinanceProvider, OptionsChainQuery,  # 需要 uv pip install yfinance
     gather,
 )
 
@@ -121,10 +121,10 @@ treasury = USTreasuryProvider()
 web = WebSearchProvider()
 cftc = CftcCotProvider()
 coingecko = CoinGeckoProvider()
-edgar = EdgarProvider()
+edgar = EdgarProvider(user_email="eyelidstl@gmail.com")  # SEC要求带邮箱，否则403
 bis = BisProvider()
 wb = WorldBankProvider()
-yf = YFinanceProvider()  # 需要 pip install yfinance
+yf = YFinanceProvider()  # 需要 uv pip install yfinance
 
 result = gather({
     "pm_events": lambda: pm.list_events(PolymarketEventQuery(slug_contains="...", limit=10)),
@@ -194,7 +194,15 @@ if chain:
 - **短期信号和长期信号矛盾吗？** 比如防务股定价十年趋势但预测市场只看一年 — 不是矛盾，是不同时间框架
 - **市场定价和直觉相反吗？** 比如人民币走强但台海风险在上升 — 说明 smart money 不信短期开战
 
-**信号分裂时的处理原则：** 不是"投票取多数"，而是看每个信号定价的时间窗口。短期悲观+长期乐观 = S曲线正在弯折，不是矛盾。答案很可能是"两件不同的事在同时发生"。
+**信号分裂时的处理原则：** 不是"投票取多数"，而是：
+
+1. **先看时间维度** — 不同信号定价不同的未来窗口：
+   - 短期(3-12月)：预测市场合约、VIX/MOVE、价格反应模式、高管减持
+   - 中期(1-3年)：龙头营收共识、CapEx计划、风投集中度、杠杆集中度
+   - 长期(3-10年)：设备商订单、不可逆资本配置、超长基建投资
+   - 短期悲观+长期乐观 ≠ 矛盾，= S曲线正在弯折
+2. **看"两件事同时发生"** — 旧经济日本化+新经济活跃可以共存于同一经济体
+3. **"方向对但时机不对"** — 长期信号看多但短期过热 → 结论不是"买/不买"而是"等回调"
 
 ### Step 5: 输出报告
 
@@ -253,11 +261,12 @@ if chain:
 - 不同信号的更新频率不同：预测市场实时，Stooq 日线延迟，Treasury 周级更新
 - CFTC COT 每周二更新、周五发布，commodity_name 用大写（"GOLD", "CRUDE OIL", "S&P 500"）
 - CoinGecko 免费 API 有频率限制（~10-30 req/min），不要在 gather 里塞太多 CoinGecko 调用
-- EDGAR 的 `get_insider_transactions` 需要先解析 ticker→CIK 映射，首次调用会稍慢
+- EDGAR 需要 `EdgarProvider(user_email="you@example.com")`，SEC 要求 User-Agent 含邮箱，否则 403。首次调用会解析 ticker→CIK 映射，稍慢
 - BIS 数据更新频率较低（月度/季度），适合判断长期趋势而非短期交易
 - World Bank GDP 数据通常滞后 1-2 年，最新年份可能返回 `None`
-- YFinance 需要 `pip install yfinance`（会自动安装 pandas），盘后数据的 IV 可能不准（bid/ask 为 0），建议盘中使用
+- YFinance 需要 `uv pip install yfinance`（会自动安装 pandas），盘后数据的 IV 可能不准（bid/ask 为 0），建议盘中使用
 - YFinance 的 `get_chain()` 自动计算 Black-Scholes Greeks（纯 stdlib `math.erf`，不需要 scipy）
 - Put delta 的绝对值 ≈ 该 strike 到期时 ITM 的概率（粗略估计）
 - Put/Call ratio > 1.5 通常是看空信号，但作为逆向指标，极端值（> 3）反而暗示底部
 - Max pain 是做市商利益最大化的行权价，实际到期时价格常常向 max pain 收敛
+- 输出报告中涉及美元金额时，用 `USD` 或 `美元` 代替 `$` 符号，避免 markdown 渲染器把 `$...$` 当作 LaTeX 公式

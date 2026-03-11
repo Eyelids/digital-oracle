@@ -7,6 +7,7 @@ from typing import Protocol
 
 from predict_by_emh.http import TextHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider
 from .prices import PriceBar, PriceHistory, PriceHistoryQuery
 
@@ -16,19 +17,6 @@ SUPPORTED_INTERVALS = {"d", "w", "m"}
 
 class StooqHttpClient(TextHttpClient, Protocol):
     pass
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
 
 
 def _normalize_symbol(symbol: str) -> str:

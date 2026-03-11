@@ -5,6 +5,7 @@ from typing import Any, Mapping, Protocol
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider
 
 KALSHI_API_URL = "https://api.elections.kalshi.com/trade-api/v2"
@@ -12,19 +13,6 @@ KALSHI_API_URL = "https://api.elections.kalshi.com/trade-api/v2"
 
 class KalshiHttpClient(JsonHttpClient, Protocol):
     pass
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
 
 
 def _unwrap_object(payload: Any, *, key: str) -> Mapping[str, Any]:

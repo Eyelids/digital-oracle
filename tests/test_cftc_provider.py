@@ -184,9 +184,21 @@ class CftcCotProviderTests(unittest.TestCase):
         self.assertNotIn("$where", params)
 
     def test_default_query_when_none(self) -> None:
-        reports = self.provider.list_reports()
+        reports = self.provider.list_reports(CftcCotQuery(primary_only=False))
         # No filter returns all records from the fake
         self.assertEqual(len(reports), 3)
+
+    def test_primary_only_deduplicates_by_date(self) -> None:
+        reports = self.provider.list_reports(CftcCotQuery(primary_only=True))
+        # 2026-03-04 has both GOLD (OI=550K) and CRUDE (OI=1.8M);
+        # primary_only keeps only CRUDE (higher OI) for that date.
+        self.assertEqual(len(reports), 2)
+        dates = [r.report_date for r in reports]
+        self.assertEqual(dates, ["2026-03-04", "2026-02-25"])
+        # The 2026-03-04 record should be CRUDE (highest OI)
+        self.assertEqual(reports[0].commodity, "CRUDE OIL, LIGHT SWEET")
+        # The 2026-02-25 record should be GOLD (only one on that date)
+        self.assertEqual(reports[1].commodity, "GOLD")
 
     # ------------------------------------------------------------------
     # Provider metadata

@@ -5,35 +5,10 @@ from typing import Any, Mapping
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float, _coerce_int
 from .base import ProviderParseError, SignalProvider
 
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
-
-
-def _coerce_int(value: object) -> int | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, int):
-        return value
-    if isinstance(value, (float, str)):
-        try:
-            return int(value)
-        except (ValueError, OverflowError):
-            return None
-    return None
 
 
 # ---------------------------------------------------------------------------

@@ -7,6 +7,7 @@ from typing import Mapping, Protocol
 
 from predict_by_emh.http import TextHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider
 
 BIS_BASE_URL = "https://stats.bis.org/api/v1"
@@ -40,19 +41,6 @@ class BisCreditGap:
     country: str
     period: str  # e.g. "2025-Q3"
     gap_pct: float  # credit-to-GDP gap percentage points
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
 
 
 class BisProvider(SignalProvider):

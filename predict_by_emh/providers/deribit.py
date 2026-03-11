@@ -5,6 +5,7 @@ from typing import Any, Mapping, Protocol
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float, _coerce_int
 from .base import ProviderParseError, SignalProvider
 
 DERIBIT_API_URL = "https://www.deribit.com/api/v2/public"
@@ -12,34 +13,6 @@ DERIBIT_API_URL = "https://www.deribit.com/api/v2/public"
 
 class DeribitHttpClient(JsonHttpClient, Protocol):
     pass
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
-
-
-def _coerce_int(value: object) -> int | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, int):
-        return value
-    if isinstance(value, float):
-        return int(value)
-    if isinstance(value, str):
-        try:
-            return int(value)
-        except ValueError:
-            return None
-    return None
 
 
 def _unwrap_result(payload: Any) -> Any:

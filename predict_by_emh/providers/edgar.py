@@ -71,8 +71,20 @@ class EdgarProvider(SignalProvider):
     display_name = "SEC EDGAR"
     capabilities = ("insider_transactions", "filings_search")
 
-    def __init__(self, http_client: JsonHttpClient | None = None):
-        self.http_client: JsonHttpClient = http_client or UrllibJsonClient()
+    def __init__(
+        self,
+        http_client: JsonHttpClient | None = None,
+        user_email: str | None = None,
+    ):
+        if http_client is None:
+            # SEC EDGAR requires User-Agent with contact email to avoid 403.
+            # See: https://www.sec.gov/os/accessing-edgar-data
+            ua = f"predict-by-emh/0.1 ({user_email})" if user_email else "predict-by-emh/0.1"
+            http_client = UrllibJsonClient(headers={
+                "Accept": "application/json",
+                "User-Agent": ua,
+            })
+        self.http_client: JsonHttpClient = http_client
         self._ticker_map: dict[str, dict[str, Any]] | None = None
 
     def _resolve_cik(self, ticker: str) -> tuple[str, str]:

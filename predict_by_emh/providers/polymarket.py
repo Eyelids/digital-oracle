@@ -6,36 +6,11 @@ from typing import Any, Mapping
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float, _coerce_int
 from .base import ProviderParseError, SignalProvider
 
 GAMMA_BASE_URL = "https://gamma-api.polymarket.com"
 CLOB_BASE_URL = "https://clob.polymarket.com"
-
-
-def _coerce_float(value: object) -> float | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, (float, int)):
-        return float(value)
-    if isinstance(value, str):
-        try:
-            return float(value)
-        except ValueError:
-            return None
-    return None
-
-
-def _coerce_int(value: object) -> int | None:
-    if value is None or value == "":
-        return None
-    if isinstance(value, int):
-        return value
-    if isinstance(value, str):
-        try:
-            return int(value)
-        except ValueError:
-            return None
-    return None
 
 
 def _json_list(value: object, *, field_name: str) -> list[object]:
@@ -204,6 +179,7 @@ class PolymarketEventQuery:
     slug: str | None = None
     slug_contains: str | None = None
     tag_id: int | None = None
+    title_contains: str | None = None  # client-side filter on event title
 
 
 class PolymarketProvider(SignalProvider):
@@ -232,7 +208,11 @@ class PolymarketProvider(SignalProvider):
         )
         if not isinstance(payload, list):
             raise ProviderParseError("expected events payload to be a list")
-        return [self._parse_event(item) for item in payload]
+        events = [self._parse_event(item) for item in payload]
+        if query.title_contains:
+            needle = query.title_contains.strip().lower()
+            events = [e for e in events if needle in e.title.lower()]
+        return events
 
     def get_event(self, slug: str) -> PolymarketEvent | None:
         payload = self.http_client.get_json(
