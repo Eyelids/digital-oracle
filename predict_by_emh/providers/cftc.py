@@ -5,6 +5,7 @@ from typing import Any, Mapping, Protocol
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_int as _coerce_int_or_none
 from .base import ProviderParseError, SignalProvider
 
 CFTC_SODA_URL = "https://publicreporting.cftc.gov/resource/72hh-3qpy.json"
@@ -15,21 +16,8 @@ class CftcHttpClient(JsonHttpClient, Protocol):
 
 
 def _coerce_int(value: object) -> int:
-    if value is None or value == "":
-        return 0
-    if isinstance(value, int):
-        return value
-    if isinstance(value, float):
-        return int(value)
-    if isinstance(value, str):
-        try:
-            return int(value)
-        except ValueError:
-            try:
-                return int(float(value))
-            except ValueError:
-                return 0
-    return 0
+    """Coerce to int, defaulting to 0 for COT positioning fields."""
+    return _coerce_int_or_none(value) or 0
 
 
 def _coerce_str(value: object) -> str:
@@ -124,7 +112,7 @@ class CftcCotProvider(SignalProvider):
             "$limit": query.limit,
         }
         if query.commodity_name:
-            upper_name = query.commodity_name.upper()
+            upper_name = query.commodity_name.upper().replace("'", "''")
             params["$where"] = f"commodity_name like '%{upper_name}%'"
 
         payload = self.http_client.get_json(CFTC_SODA_URL, params=params)

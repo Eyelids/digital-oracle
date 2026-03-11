@@ -160,6 +160,7 @@ class USTreasuryProvider(SignalProvider):
         observations = self.list_yield_curve(query)
         if not observations:
             return None
+        # Treasury CSV is newest-first; take the first row as the latest.
         return observations[0]
 
     def list_exchange_rates(self, query: ExchangeRateQuery | None = None) -> list[ExchangeRateRecord]:

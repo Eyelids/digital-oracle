@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 from dataclasses import dataclass, field
 from io import StringIO
-from typing import Mapping, Protocol
+from typing import Protocol
 
 from predict_by_emh.http import TextHttpClient, UrllibJsonClient
 

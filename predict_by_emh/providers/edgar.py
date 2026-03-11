@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping
-from urllib.parse import quote_plus
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 

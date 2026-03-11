@@ -6,6 +6,8 @@ import math
 def _coerce_float(value: object) -> float | None:
     if value is None or value == "":
         return None
+    if isinstance(value, bool):
+        return None
     if isinstance(value, (float, int)):
         f = float(value)
         if math.isnan(f) or math.isinf(f):

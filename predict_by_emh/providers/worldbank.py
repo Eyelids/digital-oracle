@@ -5,6 +5,7 @@ from typing import Any, Mapping, Protocol
 
 from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
 
+from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider
 
 WORLDBANK_BASE = "https://api.worldbank.org/v2"
@@ -76,15 +77,18 @@ class WorldBankProvider(SignalProvider):
         for item in data:
             if not isinstance(item, Mapping):
                 continue
-            raw_value = item.get("value")
-            value = float(raw_value) if raw_value is not None else None
+            value = _coerce_float(item.get("value"))
+            country = item.get("country")
+            indicator = item.get("indicator")
+            if not isinstance(country, Mapping) or not isinstance(indicator, Mapping):
+                continue
             points.append(
                 WorldBankDataPoint(
-                    country_code=item["country"]["id"],
-                    country_name=item["country"]["value"],
-                    indicator_id=item["indicator"]["id"],
-                    indicator_name=item["indicator"]["value"],
-                    date=item["date"],
+                    country_code=str(country.get("id", "")),
+                    country_name=str(country.get("value", "")),
+                    indicator_id=str(indicator.get("id", "")),
+                    indicator_name=str(indicator.get("value", "")),
+                    date=str(item.get("date", "")),
                     value=value,
                 )
             )
