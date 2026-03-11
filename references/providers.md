@@ -1,6 +1,6 @@
 # Provider API 速查
 
-所有 provider 在 `predict-by-emh/` 项目目录下运行。零外部依赖。
+前 11 个 provider 零外部依赖。YFinanceProvider 需要 `pip install yfinance`。
 
 ```python
 from predict_by_emh import (
@@ -15,6 +15,7 @@ from predict_by_emh import (
     EdgarProvider, EdgarInsiderQuery, EdgarSearchQuery,
     BisProvider, BisRateQuery, BisCreditGapQuery,
     WorldBankProvider, WorldBankQuery,
+    YFinanceProvider, OptionsChainQuery,  # pip install yfinance
 )
 ```
 
@@ -312,3 +313,63 @@ result = wb.get_indicator(WorldBankQuery(
 - `NE.TRD.GNFS.ZS` — Trade (% of GDP)
 - `BN.CAB.XOKA.CD` — Current account balance (BoP, current US$)
 - `SP.POP.TOTL` — Population, total
+
+## YFinanceProvider
+
+US 股票期权链 + Black-Scholes Greeks。**需要 `pip install yfinance`。**
+
+```python
+yf = YFinanceProvider()
+
+# 列出所有到期日
+exps = yf.get_expirations("SPY")
+# 返回 OptionsExpirations
+# exps.ticker, exps.expirations -> tuple[str, ...]
+
+# 获取期权链（自动计算 Greeks）
+chain = yf.get_chain(OptionsChainQuery(
+    ticker="SPY",
+    expiration="2026-04-17",  # 不填则取最近到期日
+    risk_free_rate=0.045,     # 无风险利率，默认 4.5%
+    compute_greeks=True,      # 默认 True
+))
+# 返回 OptionsChain
+# chain.ticker, chain.expiration, chain.underlying_price
+# chain.calls -> tuple[OptionContract, ...]
+# chain.puts  -> tuple[OptionContract, ...]
+
+# OptionContract 字段：
+# c.contract_symbol, c.option_type ("call"/"put"), c.expiration
+# c.strike, c.last_price, c.bid, c.ask, c.mid
+# c.volume, c.open_interest, c.implied_volatility, c.in_the_money
+# c.greeks -> OptionGreeks | None
+#   greeks.delta  (call: 0~1, put: -1~0; |delta| ≈ P(ITM))
+#   greeks.gamma  (delta 对标的价格的敏感度)
+#   greeks.theta  (每日时间衰减)
+#   greeks.vega   (IV 每变 1% 的价格变化)
+
+# 便捷属性
+chain.atm_strike                # ATM 行权价
+chain.atm_call                  # ATM call 合约
+chain.atm_put                   # ATM put 合约
+chain.atm_iv                    # ATM 隐含波动率
+chain.implied_move()            # 市场隐含波动幅度（ATM straddle / 标的价）
+chain.put_call_volume_ratio     # 看跌/看涨成交量比
+chain.put_call_oi_ratio         # 看跌/看涨持仓量比
+chain.total_volume              # 总成交量
+chain.total_open_interest       # 总持仓量
+chain.max_pain()                # 最大痛点行权价
+
+# 独立使用 Black-Scholes Greeks
+from predict_by_emh import black_scholes_greeks
+g = black_scholes_greeks(S=150, K=145, T=0.1, r=0.045, sigma=0.25, option_type="call")
+# g.delta, g.gamma, g.theta, g.vega
+```
+
+**分析技巧：**
+- `|put delta|` ≈ 该 strike 到期时 ITM 的概率（粗略但实用）
+- `put_call_volume_ratio > 1.5` = 看空情绪；极端值 `> 3` 作为逆向指标反而看多
+- `implied_move()` = 市场对到期前涨跌幅的共识预期
+- `atm_iv` vs 历史实际波动率 → IV 溢价/折价判断（期权"贵不贵"）
+- `max_pain` = 到期时价格常向此收敛（做市商利益最大化）
+- IV skew：比较同 delta 的 OTM put IV vs OTM call IV → 市场对下跌的恐惧程度

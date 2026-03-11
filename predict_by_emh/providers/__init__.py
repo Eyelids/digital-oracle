@@ -83,6 +83,15 @@ from .worldbank import (
     WorldBankQuery,
     WorldBankResult,
 )
+from .yfinance_provider import (
+    OptionContract,
+    OptionGreeks,
+    OptionsChain,
+    OptionsChainQuery,
+    OptionsExpirations,
+    YFinanceProvider,
+    black_scholes_greeks,
+)
 
 __all__ = [
     "BisCreditGap",
@@ -151,6 +160,13 @@ __all__ = [
     "WorldBankQuery",
     "WorldBankResult",
     "YieldCurveQuery",
+    "YFinanceProvider",
     "YieldCurveSnapshot",
     "YieldPoint",
+    "OptionContract",
+    "OptionGreeks",
+    "OptionsChain",
+    "OptionsChainQuery",
+    "OptionsExpirations",
+    "black_scholes_greeks",
 ]

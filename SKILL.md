@@ -1,6 +1,6 @@
 ---
 name: predict-by-emh
-description: "Answer prediction questions using market trading data, not opinions. Use when the user asks probability questions about geopolitics, economics, markets, industries, or any topic where real money is being traded on the outcome. Examples: 'What's the probability of WW3?', 'Will there be a recession?', 'Is AI in a bubble?', 'When will the Russia-Ukraine war end?', 'Is it a good time to buy gold?'. The skill reads prices from prediction markets, commodities, equities, derivatives, yield curves, and currencies, then cross-validates multiple signals to produce a structured probability report."
+description: "Answer prediction questions using market trading data, not opinions. Use when the user asks probability questions about geopolitics, economics, markets, industries, or any topic where real money is being traded on the outcome. Examples: 'What's the probability of WW3?', 'Will there be a recession?', 'Is AI in a bubble?', 'When will the Russia-Ukraine war end?', 'Is it a good time to buy gold?', 'Will SPY drop 5% this month?', 'Is NVDA options premium overpriced?'. The skill reads prices from prediction markets, commodities, equities, options chains, derivatives, yield curves, and currencies, then cross-validates multiple signals to produce a structured probability report."
 ---
 
 # predict-by-emh
@@ -71,12 +71,22 @@ description: "Answer prediction questions using market trading data, not opinion
 - Stooq: 目标资产价格走势（日线/周线/月线）
 - 相关资产的相对价格变化（两种商品价差分化 = 结构性信号）
 - Treasury: 无风险利率作为估值锚
+- YFinance: 期权链（IV、put/call ratio、max pain、Greeks、implied move）
 - EDGAR: 内部人减持节奏（大量 Form 4 卖出 = 内部人看空）
 - CFTC COT: 商品类资产看投机/商业净仓位分歧
 - CoinGecko: 加密资产看市值、ATH/ATL 距离、24h 波动
-- Deribit: 期权链（隐含波动率 = 市场预期的波动范围）
+- Deribit: 加密期权链（隐含波动率 = 市场预期的波动范围）
 - Polymarket/Kalshi: 相关事件的概率定价
 - Web search: 企业发债规模、分析师评级分布
+
+#### 股票/期权分析 / 崩盘概率
+- YFinance: 期权链 → ATM IV（市场预期波动）、IV skew（上下行恐惧不对称）、put/call ratio（多空情绪）、max pain（做市商利益区）、implied move（市场预期涨跌幅）、Greeks（delta ≈ ITM概率）
+- Stooq: 标的历史价格 → 实际波动率（对比隐含波动率判断期权溢价）
+- Kalshi: SPY/NASDAQ 价格区间市场 → 直接概率定价
+- CFTC COT: S&P 500/VIX 期货持仓 → 机构方向
+- 防御轮换: XLY(周期) vs XLP(防御) vs XLU(公用) 相对表现 → 市场防御心态
+- Treasury: 收益率曲线形态 → 衰退信号
+- Web search: VIX 水平、margin debt 水平、杠杆ETF 集中度
 
 **详细的元信号参考：** 见 [references/signals.md](references/signals.md)
 **可用交易符号目录：** 见 [references/symbols.md](references/symbols.md)
@@ -99,6 +109,7 @@ from predict_by_emh import (
     EdgarProvider, EdgarInsiderQuery,
     BisProvider, BisRateQuery,
     WorldBankProvider, WorldBankQuery,
+    YFinanceProvider, OptionsChainQuery,  # 需要 pip install yfinance
     gather,
 )
 
@@ -113,6 +124,7 @@ coingecko = CoinGeckoProvider()
 edgar = EdgarProvider()
 bis = BisProvider()
 wb = WorldBankProvider()
+yf = YFinanceProvider()  # 需要 pip install yfinance
 
 result = gather({
     "pm_events": lambda: pm.list_events(PolymarketEventQuery(slug_contains="...", limit=10)),
@@ -128,6 +140,8 @@ result = gather({
     "rates": lambda: bis.get_policy_rates(BisRateQuery(countries=("US", "CN"), start_year=2023)),
     # GDP 数据
     "gdp": lambda: wb.get_indicator(WorldBankQuery(indicator="NY.GDP.MKTP.CD", countries=("US", "CN"))),
+    # 期权链（含 Greeks）
+    "spy_options": lambda: yf.get_chain(OptionsChainQuery(ticker="SPY", expiration="2026-04-17")),
     # web search 与结构化 provider 平行执行
     "vix": lambda: web.search("VIX index current level"),
     "hy_spread": lambda: web.search("US high yield bond spread OAS"),
@@ -136,23 +150,33 @@ result = gather({
 # 部分数据源失败不影响其他结果
 curve = result.get("yield_curve")
 vix_info = result.get_or("vix", None)  # WebSearchResult，用 .text() 渲染
+
+# 期权数据使用
+chain = result.get_or("spy_options", None)
+if chain:
+    print(f"ATM IV: {chain.atm_iv:.1%}, Implied move: {chain.implied_move():.1%}")
+    print(f"Put/Call OI ratio: {chain.put_call_oi_ratio:.2f}")
+    print(f"Max pain: {chain.max_pain()}")
 ```
 
-**所有 11 个 Provider（全部零 API key）：**
+**所有 12 个 Provider：**
 
-| Provider | 数据类型 | 用途 |
-|----------|---------|------|
-| PolymarketProvider | 预测市场合约 | 事件概率定价 |
-| KalshiProvider | 二元合约 | 美国监管事件合约 |
-| StooqProvider | 价格历史 | 股票/ETF/外汇/商品 |
-| DeribitProvider | 加密衍生品 | 期货term structure、期权IV |
-| USTreasuryProvider | 国债收益率 | 利率曲线、通胀预期 |
-| WebSearchProvider | 网页搜索 | VIX/MOVE/CDS等补充数据 |
-| CftcCotProvider | 期货持仓 | 机构仓位方向（smart money） |
-| CoinGeckoProvider | 加密现货 | BTC/ETH价格、市值、dominance |
-| EdgarProvider | SEC文件 | 内部人交易Form 4、公告检索 |
-| BisProvider | 央行数据 | 政策利率、信贷/GDP缺口 |
-| WorldBankProvider | 发展指标 | GDP、人口、贸易等宏观数据 |
+| Provider | 数据类型 | 用途 | 依赖 |
+|----------|---------|------|------|
+| PolymarketProvider | 预测市场合约 | 事件概率定价 | stdlib |
+| KalshiProvider | 二元合约 | 美国监管事件合约 | stdlib |
+| StooqProvider | 价格历史 | 股票/ETF/外汇/商品 | stdlib |
+| DeribitProvider | 加密衍生品 | 期货term structure、期权IV | stdlib |
+| USTreasuryProvider | 国债收益率 | 利率曲线、通胀预期 | stdlib |
+| WebSearchProvider | 网页搜索 | VIX/MOVE/CDS等补充数据 | stdlib |
+| CftcCotProvider | 期货持仓 | 机构仓位方向（smart money） | stdlib |
+| CoinGeckoProvider | 加密现货 | BTC/ETH价格、市值、dominance | stdlib |
+| EdgarProvider | SEC文件 | 内部人交易Form 4、公告检索 | stdlib |
+| BisProvider | 央行数据 | 政策利率、信贷/GDP缺口 | stdlib |
+| WorldBankProvider | 发展指标 | GDP、人口、贸易等宏观数据 | stdlib |
+| **YFinanceProvider** | **US期权链** | **IV、Greeks、put/call ratio、max pain** | **yfinance** |
+
+> 前 11 个 provider 零外部依赖。YFinanceProvider 需要 `pip install yfinance`。
 
 **WebSearchProvider 用法：**
 - `web.search("query")` → 返回 `WebSearchResult`（搜索摘要），用 `.text()` 渲染为可读文本
@@ -232,3 +256,8 @@ vix_info = result.get_or("vix", None)  # WebSearchResult，用 .text() 渲染
 - EDGAR 的 `get_insider_transactions` 需要先解析 ticker→CIK 映射，首次调用会稍慢
 - BIS 数据更新频率较低（月度/季度），适合判断长期趋势而非短期交易
 - World Bank GDP 数据通常滞后 1-2 年，最新年份可能返回 `None`
+- YFinance 需要 `pip install yfinance`（会自动安装 pandas），盘后数据的 IV 可能不准（bid/ask 为 0），建议盘中使用
+- YFinance 的 `get_chain()` 自动计算 Black-Scholes Greeks（纯 stdlib `math.erf`，不需要 scipy）
+- Put delta 的绝对值 ≈ 该 strike 到期时 ITM 的概率（粗略估计）
+- Put/Call ratio > 1.5 通常是看空信号，但作为逆向指标，极端值（> 3）反而暗示底部
+- Max pain 是做市商利益最大化的行权价，实际到期时价格常常向 max pain 收敛
