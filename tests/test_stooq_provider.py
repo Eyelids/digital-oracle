@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from predict_by_emh.providers import PriceHistoryQuery, StooqProvider
+from digital_oracle.providers import PriceHistoryQuery, StooqProvider
 
 
 def _fixture_text(name: str) -> str:

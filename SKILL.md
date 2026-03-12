@@ -1,10 +1,10 @@
 ---
-name: predict-by-emh
+name: digital-oracle
 description: "Answer prediction questions using market trading data, not opinions. Use when the user asks probability questions about geopolitics, economics, markets, industries, or any topic where real money is being traded on the outcome. Examples: 'What's the probability of WW3?', 'Will there be a recession?', 'Is AI in a bubble?', 'When will the Russia-Ukraine war end?', 'Is it a good time to buy gold?', 'Will SPY drop 5% this month?', 'Is NVDA options premium overpriced?'. The skill reads prices from prediction markets, commodities, equities, options chains, derivatives, yield curves, and currencies, then cross-validates multiple signals to produce a structured probability report."
 metadata: { "openclaw": { "emoji": "📈", "requires": { "bins": ["uv"] } } }
 ---
 
-# predict-by-emh
+# digital-oracle
 
 > 市场是有效的，价格包含了所有公开信息。读价格 = 读市场共识。
 
@@ -94,10 +94,10 @@ metadata: { "openclaw": { "emoji": "📈", "requires": { "bins": ["uv"] } } }
 
 ### Step 3: 拉取数据
 
-用 predict-by-emh 的 Python provider 拉取结构化数据，用 `gather()` 并行调用所有数据源（包括 web search）：
+用 digital-oracle 的 Python provider 拉取结构化数据，用 `gather()` 并行调用所有数据源（包括 web search）：
 
 ```python
-from predict_by_emh import (
+from digital_oracle import (
     PolymarketProvider, PolymarketEventQuery,
     KalshiProvider, KalshiMarketQuery,
     StooqProvider, PriceHistoryQuery,

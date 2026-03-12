@@ -51,7 +51,7 @@ class UrllibSearchClient:
     timeout_seconds: float = 20.0
     retry_attempts: int = 3
     retry_delay_seconds: float = 1.0
-    user_agent: str = "predict-by-emh/0.1"
+    user_agent: str = "digital-oracle/0.1"
 
     def fetch(self, url: str, *, headers: dict[str, str] | None = None) -> str:
         hdrs = {
@@ -352,7 +352,7 @@ class WebSearchProvider(SignalProvider):
                 DDG_HTML_URL,
                 data=form_data,
                 headers={
-                    "User-Agent": "predict-by-emh/0.1",
+                    "User-Agent": "digital-oracle/0.1",
                     "Content-Type": "application/x-www-form-urlencoded",
                     "Accept": "text/html",
                     "Accept-Language": "en-US,en;q=0.9",

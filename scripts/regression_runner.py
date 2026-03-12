@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression test runner: run full predict-by-emh workflow on real topics.
+"""Regression test runner: run full digital-oracle workflow on real topics.
 
 Usage: python3 scripts/regression_runner.py <test_number>
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from predict_by_emh import (
+from digital_oracle import (
     PolymarketProvider, PolymarketEventQuery,
     KalshiProvider, KalshiMarketQuery,
     StooqProvider, PriceHistoryQuery,

@@ -8,7 +8,7 @@ PACKAGE_ROOT = Path(__file__).resolve().parent
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
-from predict_by_emh.providers import PolymarketEvent, PolymarketEventQuery, PolymarketProvider
+from digital_oracle.providers import PolymarketEvent, PolymarketEventQuery, PolymarketProvider
 
 
 def _format_probability(value: float | None) -> str:

@@ -6,7 +6,7 @@ import math
 import unittest
 from typing import Any
 
-from predict_by_emh.providers.yfinance_provider import (
+from digital_oracle.providers.yfinance_provider import (
     OptionContract,
     OptionGreeks,
     OptionsChain,

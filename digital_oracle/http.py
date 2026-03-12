@@ -48,7 +48,7 @@ class UrllibJsonClient:
     headers: Mapping[str, str] = field(
         default_factory=lambda: {
             "Accept": "application/json,text/csv,text/plain,application/xml",
-            "User-Agent": "predict-by-emh/0.1",
+            "User-Agent": "digital-oracle/0.1",
         }
     )
 

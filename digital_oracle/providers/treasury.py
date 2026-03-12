@@ -6,7 +6,7 @@ from datetime import date
 from io import StringIO
 from typing import Any, Mapping, Protocol
 
-from predict_by_emh.http import JsonHttpClient, TextHttpClient, UrllibJsonClient
+from digital_oracle.http import JsonHttpClient, TextHttpClient, UrllibJsonClient
 
 from ._coerce import _coerce_float
 from .base import ProviderParseError, SignalProvider

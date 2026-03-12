@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from predict_by_emh.providers import PolymarketEventQuery, PolymarketProvider
+from digital_oracle.providers import PolymarketEventQuery, PolymarketProvider
 
 
 def _fixture(name: str) -> Any:

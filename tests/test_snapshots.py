@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from predict_by_emh.snapshots import RecordingHttpClient, ReplayHttpClient, SnapshotMissError
+from digital_oracle.snapshots import RecordingHttpClient, ReplayHttpClient, SnapshotMissError
 
 
 class FakeJsonClient:

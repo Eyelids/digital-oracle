@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from predict_by_emh.providers.cftc import CftcCotProvider, CftcCotQuery, CftcCotReport
+from digital_oracle.providers.cftc import CftcCotProvider, CftcCotQuery, CftcCotReport
 
 # ---------------------------------------------------------------------------
 # Sample fixture data mimicking the CFTC SODA API response

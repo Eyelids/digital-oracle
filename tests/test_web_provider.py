@@ -1,11 +1,11 @@
-"""Tests for predict_by_emh.providers.web – WebSearchProvider."""
+"""Tests for digital_oracle.providers.web – WebSearchProvider."""
 
 from __future__ import annotations
 
 import unittest
 from dataclasses import dataclass
 
-from predict_by_emh.providers.web import (
+from digital_oracle.providers.web import (
     WebPageContent,
     WebPageQuery,
     WebSearchProvider,

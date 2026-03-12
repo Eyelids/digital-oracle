@@ -3,7 +3,7 @@
 前 11 个 provider 零外部依赖。YFinanceProvider 需要 `pip install yfinance`。
 
 ```python
-from predict_by_emh import (
+from digital_oracle import (
     PolymarketProvider, PolymarketEventQuery,
     KalshiProvider, KalshiMarketQuery,
     StooqProvider, PriceHistoryQuery,
@@ -168,7 +168,7 @@ result = web.search("VIX index current level")
 # result.text() -> 渲染为可读文本块
 
 # 也可传 WebSearchQuery 控制结果数
-from predict_by_emh import WebSearchQuery
+from digital_oracle import WebSearchQuery
 result = web.search(WebSearchQuery(query="US high yield OAS spread", max_results=3))
 
 # 抓取页面正文
@@ -361,7 +361,7 @@ chain.total_open_interest       # 总持仓量
 chain.max_pain()                # 最大痛点行权价
 
 # 独立使用 Black-Scholes Greeks
-from predict_by_emh import black_scholes_greeks
+from digital_oracle import black_scholes_greeks
 g = black_scholes_greeks(S=150, K=145, T=0.1, r=0.045, sigma=0.25, option_type="call")
 # g.delta, g.gamma, g.theta, g.vega
 ```

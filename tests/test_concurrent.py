@@ -1,4 +1,4 @@
-"""Tests for predict_by_emh.concurrent – the gather() utility."""
+"""Tests for digital_oracle.concurrent – the gather() utility."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import threading
 import time
 import unittest
 
-from predict_by_emh.concurrent import GatherError, GatherResult, gather
+from digital_oracle.concurrent import GatherError, GatherResult, gather
 
 
 class TestGatherBasic(unittest.TestCase):

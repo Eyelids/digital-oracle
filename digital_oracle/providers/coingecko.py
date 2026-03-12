@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
+from digital_oracle.http import JsonHttpClient, UrllibJsonClient
 
 from ._coerce import _coerce_float, _coerce_int
 from .base import ProviderParseError, SignalProvider

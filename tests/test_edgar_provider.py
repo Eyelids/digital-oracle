@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from predict_by_emh.providers.edgar import (
+from digital_oracle.providers.edgar import (
     EDGAR_SEARCH_URL,
     EDGAR_SUBMISSIONS_URL,
     EDGAR_TICKERS_URL,
@@ -18,7 +18,7 @@ from predict_by_emh.providers.edgar import (
     EdgarProvider,
     EdgarSearchQuery,
 )
-from predict_by_emh.providers.base import ProviderError
+from digital_oracle.providers.base import ProviderError
 
 
 SAMPLE_TICKERS = {

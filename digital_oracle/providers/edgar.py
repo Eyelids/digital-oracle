@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
-from predict_by_emh.http import JsonHttpClient, UrllibJsonClient
+from digital_oracle.http import JsonHttpClient, UrllibJsonClient
 
 from .base import ProviderError, ProviderParseError, SignalProvider
 
@@ -78,7 +78,7 @@ class EdgarProvider(SignalProvider):
         if http_client is None:
             # SEC EDGAR requires User-Agent with contact email to avoid 403.
             # See: https://www.sec.gov/os/accessing-edgar-data
-            ua = f"predict-by-emh/0.1 ({user_email})" if user_email else "predict-by-emh/0.1"
+            ua = f"digital-oracle/0.1 ({user_email})" if user_email else "digital-oracle/0.1"
             http_client = UrllibJsonClient(headers={
                 "Accept": "application/json",
                 "User-Agent": ua,

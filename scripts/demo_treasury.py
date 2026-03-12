@@ -8,7 +8,7 @@ PACKAGE_ROOT = Path(__file__).resolve().parent
 if str(PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(PACKAGE_ROOT))
 
-from predict_by_emh.providers import ExchangeRateQuery, USTreasuryProvider, YieldCurveQuery
+from digital_oracle.providers import ExchangeRateQuery, USTreasuryProvider, YieldCurveQuery
 
 
 def _print_curve(kind: str, observation_limit: int, year: int | None) -> None:
