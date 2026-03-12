@@ -1,33 +1,31 @@
-**English** | [中文](README.zh-CN.md)
-
 # Digital Oracle 📈
 
-The core idea behind this project is **Predict by EMH (Efficient Market Hypothesis)** — use market price signals to reverse-engineer the probabilities and trajectories of macro-scale world events.
+这个项目的核心理念是 **Predict by EMH（市场有效假说）** — 通过市场的价格信号来反推所有宏观世界的可能性和世界大趋势的走向。
 
-We live in an era of extreme noise. Social media is flooded with emotional predictions — someone says housing is about to crash, someone says gold is going to the moon, someone says war breaks out tomorrow. These opinions chase crowd sentiment rather than rational analysis grounded in objective data. But trading data is different. Price is absolutely rational — when someone puts real money on an outcome, they think a lot harder than when they write a tweet.
+我们生活在一个噪音极度泛滥的时代。社交媒体上充斥着情绪化的预测 — 有人说房价要崩了，有人说黄金要上天，有人说明天就打仗。这些观点往往顺应人群情绪，而不是基于客观数据的理性分析。但交易数据不一样。价格是绝对理性的 — 当一个人要把自己的钱押在某个结果上时，他会比写一条微博认真得多。
 
-This is the core insight of the Efficient Market Hypothesis: **all public information is already priced in. Everything is in the chart.**
+这就是有效市场理论的核心洞察：**所有公开信息都已经被价格消化了。一切信息都在 K 线里。**
 
-Embedded in price is market consensus — and behind that consensus are countless sharp minds with rational calculations, deep domain knowledge, and insider information.
+价格里面有市场共识，市场共识里有无数聪明头脑的理性计算、深度认知和内幕信息。
 
-Digital Oracle turns this insight into an executable tool. It plugs into 12 authoritative financial data sources — from prediction markets like Polymarket and Kalshi, to US Treasury yield curves, CFTC institutional positioning, SEC insider trades, central bank rates, and crypto derivatives — then lets an AI model cross-validate these signals to reverse-engineer macro trends from price.
+Digital Oracle 把这个洞察变成了一个可执行的工具。它接入了 12 个权威金融数据源 — 从 Polymarket 和 Kalshi 这样的预测市场，到美国国债收益率曲线、CFTC 机构持仓、SEC 内部人交易、各国央行利率、加密衍生品 — 然后让 AI 大模型把这些信号交叉验证，用价格反推宏观事件的趋势和方向。
 
-It's not a chatbot regurgitating news. It's an analytical system that reads consensus from global trading data — capable of answering questions about housing prices, gold trends, Bitcoin cycles, and military conflict probabilities, delivering structured probability estimates with full reasoning chains.
+它不是一个聊天机器人在复述新闻。它是一个从全球交易数据中读取共识的分析系统 — 能回答房价涨跌、黄金走势、比特币周期、军事冲突概率这类问题，并给出结构化的概率估计和推理链。
 
-In a sense, it's a digital oracle for the new era.
+某种意义上，这就是新时代的数字先知。
 
-## What can it answer?
+## 能回答什么问题？
 
-- "What's the probability of WW3?"
-- "Will there be a US recession this year?"
-- "Is AI in a bubble?"
-- "Is now a good time to buy gold?"
-- "Has Bitcoin bottomed?"
-- "Is NVDA options premium overpriced?"
+- "WW3 的概率是多少？"
+- "中国房价还会跌多久？"
+- "AI 是不是泡沫？"
+- "现在适合买黄金吗？"
+- "比特币到底了吗？"
+- "NVDA 期权溢价是不是太高了？"
 
-If there's a market pricing an outcome, Digital Oracle can give you a probability estimate backed by trading data.
+只要有市场在定价这件事，Digital Oracle 就能给出一个基于交易数据的概率估计。
 
-## Installation
+## 安装
 
 ### OpenClaw
 
@@ -35,73 +33,73 @@ If there's a market pricing an outcome, Digital Oracle can give you a probabilit
 clawhub install digital-oracle
 ```
 
-### Other AI Agents (Claude Code / Cursor / Codex / ...)
+### 其他 AI Agent（Claude Code / Cursor / Codex / ...）
 
-Just tell your agent:
+直接告诉你的 Agent：
 
-> Install this open-source project and read SKILL.md as your working instructions: https://github.com/komako-workshop/digital-oracle
+> 安装这个开源项目并读取 SKILL.md 作为你的工作指令：https://github.com/komako-workshop/digital-oracle
 
-The agent will clone the repo, read the methodology, and call the providers on its own.
+Agent 会自行 clone 代码、阅读方法论、调用 provider。
 
-### Prerequisites
+### 前置依赖
 
-- [uv](https://docs.astral.sh/uv/) — Python package manager, used to run skill scripts at runtime
-- 11 out of 12 data sources have zero external dependencies (pure Python stdlib). Options chain analysis requires an extra install:
+- [uv](https://docs.astral.sh/uv/) — Python 包管理器，skill 运行时用它执行 Python 脚本
+- 12 个数据源中有 11 个零外部依赖（纯 Python 标准库）。期权链分析需要额外安装：
 
 ```bash
 uv pip install yfinance
 ```
 
-## Data Sources
+## 数据源
 
-| Provider | Data Type | Purpose |
-|----------|-----------|---------|
-| Polymarket | Prediction market contracts | Event probability pricing |
-| Kalshi | SEC-regulated binary contracts | US political/economic events |
-| Stooq | Stocks/ETFs/FX/Commodities | Price history and trends |
-| Deribit | Crypto derivatives | Futures term structure, options IV |
-| US Treasury | Treasury yields | Yield curves, inflation expectations |
-| CFTC COT | Futures positioning | Institutional direction (smart money) |
-| CoinGecko | Crypto spot | BTC/ETH price, market cap |
-| SEC EDGAR | Insider trades | Form 4 buy/sell signals |
-| BIS | Central bank data | Policy rates, credit-to-GDP gaps |
-| World Bank | Development indicators | GDP, population, trade |
-| Yahoo Finance | US options chains | IV, Greeks, put/call ratio |
-| Web Search | Web search | VIX, CDS, and other supplementary data |
+| Provider | 数据类型 | 用途 |
+|----------|---------|------|
+| Polymarket | 预测市场合约 | 事件概率定价 |
+| Kalshi | SEC 监管二元合约 | 美国政治/经济事件 |
+| Stooq | 股票/ETF/外汇/商品 | 价格历史和趋势 |
+| Deribit | 加密衍生品 | 期货 term structure、期权 IV |
+| US Treasury | 国债收益率 | 利率曲线、通胀预期 |
+| CFTC COT | 期货持仓 | 机构仓位方向（smart money） |
+| CoinGecko | 加密现货 | BTC/ETH 价格、市值 |
+| SEC EDGAR | 内部人交易 | Form 4 买卖信号 |
+| BIS | 央行数据 | 政策利率、信贷/GDP 缺口 |
+| World Bank | 发展指标 | GDP、人口、贸易 |
+| Yahoo Finance | US 期权链 | IV、Greeks、put/call ratio |
+| Web Search | 网页搜索 | VIX、CDS 等补充数据 |
 
-All APIs are free and require no API keys.
+所有 API 均免费、无需 API Key。
 
-## How It Works
+## 工作原理
 
-1. **Understand the question** — decompose into core variables, time window, and priceability
-2. **Select signals** — pick 3+ independent data sources based on question type
-3. **Fetch in parallel** — use `gather()` to call multiple providers concurrently
-4. **Contradiction analysis** — find disagreements between markets, explain why both can be right
-5. **Output report** — structured multi-layer signal tables + probability estimates + scenario analysis
+1. **理解问题** — 拆解核心变量、时间窗口、可定价性
+2. **选择信号** — 根据问题类型选择 3+ 个独立数据源
+3. **并行拉取** — 用 `gather()` 同时调用多个 provider
+4. **矛盾推理** — 找不同市场之间的分歧，解释为什么它们可以同时正确
+5. **输出报告** — 结构化的多层信号表格 + 概率估计 + 场景分析
 
-## Project Structure
+## 项目结构
 
 ```
 digital-oracle/
-├── SKILL.md                # Skill definition (read by OpenClaw)
-├── digital_oracle/         # Python source code
-│   ├── concurrent.py       # Parallel execution utilities
-│   ├── http.py             # HTTP client abstraction
-│   ├── snapshots.py        # HTTP response recording/replay (for tests)
-│   └── providers/          # 12 data providers
-├── references/             # API reference
-│   ├── providers.md        # Provider API docs
-│   └── symbols.md          # Trading symbol directory
-├── scripts/                # Demo scripts
-└── tests/                  # Unit tests + fixtures
+├── SKILL.md                # Skill 定义（OpenClaw 读取这个文件）
+├── digital_oracle/         # Python 源码
+│   ├── concurrent.py       # 并行执行工具
+│   ├── http.py             # HTTP 客户端抽象
+│   ├── snapshots.py        # HTTP 响应录制/回放（测试用）
+│   └── providers/          # 12 个数据 provider
+├── references/             # API 速查
+│   ├── providers.md        # Provider API 参考
+│   └── symbols.md          # 交易符号目录
+├── scripts/                # Demo 脚本
+└── tests/                  # 单元测试 + fixtures
 ```
 
-## Design Principles
+## 设计原则
 
-- **Zero dependencies first** — 11/12 providers use only the Python standard library, no `pip install` needed
-- **Dependency injection** — all providers accept an optional `http_client` parameter for easy testing
-- **Partial failure tolerance** — one data source going down doesn't break the rest
-- **Snapshot testing** — record real HTTP responses, run tests offline in CI
+- **零依赖优先** — 11/12 个 provider 只用 Python 标准库，无需 `pip install`
+- **依赖注入** — 所有 provider 接受可选的 `http_client` 参数，方便测试
+- **部分失败容忍** — 一个数据源挂了不影响其他结果
+- **快照测试** — 录制真实 HTTP 响应，CI 里无网络也能跑测试
 
 ## License
 
