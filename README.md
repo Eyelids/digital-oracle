@@ -79,8 +79,7 @@ digital-oracle/
 │   ├── http.py             # HTTP 客户端抽象
 │   ├── snapshots.py        # HTTP 响应录制/回放（测试用）
 │   └── providers/          # 12 个数据 provider
-├── references/             # 方法论文档 & API 速查
-│   ├── METHOD.md           # 详细方法论
+├── references/             # API 速查
 │   ├── providers.md        # Provider API 参考
 │   └── symbols.md          # 交易符号目录
 ├── scripts/                # Demo 脚本
