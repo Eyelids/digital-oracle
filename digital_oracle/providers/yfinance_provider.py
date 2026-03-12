@@ -297,13 +297,16 @@ class _YFinanceFetcher:
     def __init__(self) -> None:
         try:
             import yfinance  # type: ignore[import-untyped]
+        except ImportError:
+            import subprocess, sys
 
-            self._yf = yfinance
-        except ImportError as exc:
-            raise ImportError(
-                "yfinance is required for YFinanceProvider. "
-                "Install it with: pip install yfinance"
-            ) from exc
+            subprocess.check_call(
+                ["uv", "pip", "install", "yfinance"],
+                stdout=sys.stderr,
+            )
+            import yfinance  # type: ignore[import-untyped]
+
+        self._yf = yfinance
 
     def fetch_expirations(self, ticker: str) -> tuple[str, ...]:
         t = self._yf.Ticker(ticker)
